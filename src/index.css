@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-on-login {
+  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 hover:bg-green-600 bg-green-500 transition-colors;
+}
+.btn-off-login {
+  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 bg-green-500 opacity-40 cursor-not-allowed;
+}
+.label-login {
+  @apply block mb-2 font-bold uppercase sm:text-sm text-gray-800;
+}
+.default-label {
+  @apply block mb-2 font-bold uppercase text-sm text-white;
+}
+.label-bg-bright {
+  @apply block mb-2 font-bold uppercase text-sm text-slate-700;
+}
+.input-default {
+  @apply block w-full px-4 py-3 mb-3 border rounded bg-white disabled:bg-gray-300;
+}
+.div-login {
+  @apply w-5/6 md:w-2/4 xl:w-1/3 bg-white border border-black rounded-lg shadow self-center flex justify-center;
+}
+.div-alert-modal {
+  @apply mt-5 p-3 h-1/6 text-neutral-50 mx-10 border rounded text-center;
+}
+.div-alert {
+  @apply mt-5 p-3 text-neutral-50 inline-block border rounded text-center;
+}
+.menu-link {
+  @apply block p-0 text-gray-900  hover:text-blue-300 text-white 
+}
+.menu-link-active {
+  @apply block p-0 text-blue-300  hover:text-blue-300 
+}
+.menu-btn {
+  @apply block py-0.5 px-4 text-white transform hover:scale-95 transition duration-500 ease-in-out text-center text-white bg-red-600 rounded bottom-2 hover:bg-red-700
+} 
+.menu-dropdown {
+  @apply flex items-center justify-between w-full py-2 px-3 rounded-sm md:hover:bg-transparent md:border-0 md:hover:text-blue-300 md:p-0 md:w-auto text-white   
+}
+.menu-dropdown-active {
+  @apply flex items-center justify-between w-full py-2 px-3 text-blue-300 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-300 md:p-0 md:w-auto
+}
+.menu-dropdown-item {
+  @apply block px-4 py-2 hover:bg-gray-600 hover:text-white
+}
+.menu-dropdown-item-active {
+  @apply block px-4 py-2 bg-gray-600 text-white
+}
+.default-btn {
+  @apply block px-5 py-2 text-center text-white border rounded mt-7 hover:bg-blue-800 bg-blue-950 transition-colors;
+}
+.default-btn-span {
+  @apply block transform hover:scale-90 transition duration-500 ease-in-out
+}
+.disabled-btn-span {
+  @apply block transform hover:scale-90 transition duration-500 ease-in-out
+}
+
+.default-div-table {
+  @apply h-64 overflow-y-auto border border-blue-600 rounded drop-shadow-xl shadow-xl;
+}
+
+.default-table {
+  @apply table w-full drop-shadow-xl;
+}
+.default-table-header {
+  @apply tracking-wide text-center bg-blue-600 border-b border-white text-white;
+}
+.default-table-header-content {
+  @apply px-4 py-3;
+}
+
+.default-table-content {
+  @apply  px-2 py-3 uppercase sm:text-sm  text-center;
+}
+.default-table-line {
+  @apply relative after:content-[''] after:absolute after:left-6 after:right-6 after:bottom-0 after:h-px after:bg-gray-300;
+}
+.selectable-table-line {
+  @apply bg-slate-400 hover:bg-slate-500 transition-colors delay-75 cursor-pointer;
+}
+.table-content-actions {
+  @apply p-2 uppercase sm:text-sm text-white font-semibold h-11 flex justify-around gap-2;
+}
+.table-btn-edit {
+  @apply p-1 bg-blue-700 hover:bg-blue-800 transition duration-200 w-1/3 rounded-sm flex justify-center
+}
+.table-btn-delete {
+  @apply p-1 bg-red-700 hover:bg-red-800 transition duration-200 w-1/3 rounded-sm flex justify-center
+}
+.select-form {
+  @apply relative block w-full px-4 py-3 pr-8 uppercase border rounded bg-white disabled:bg-gray-300;
+}
+.modal-content {
+  @apply max-h-96 max-w-96 overflow-y-auto overflow-x-auto md:overflow-x-hidden
+}
+.modal-label {
+  @apply block text-start mb-2 font-bold uppercase sm:text-sm text-blue-600;
+}
+.modal-btn-close {
+  @apply absolute transition duration-200 right-2 px-3 rounded-lg text-white bg-red-600 p-1 rounded-sm hover:bg-red-700;
+}
+.modal-btn-confirm {
+  @apply block transition duration-200 px-6 py-2 text-center text-white border rounded mt-7 hover:bg-green-700 bg-green-600 
+}
+.div-form {
+  @apply grid grid-cols-12 gap-8 bg-gray-300 mt-4 p-3 overflow-auto
+}
+.div-form-associados {
+  @apply grid grid-cols-12 gap-x-4 sm:gap-x-8 bg-gray-300 mt-4 p-3 overflow-auto
+}
+.paginacao-div {
+  @apply inline-flex items-center justify-end w-full mt-5 rounded-md gap-1
+}
+.paginacao-link {
+  @apply relative inline-flex items-center px-4 py-2 text-sm font-medium border;
+}
+.paginacao-link-inativo {
+  @apply text-gray-500 bg-gray-100 border border-gray-400;
+}
+.paginacao-link-ativo {
+  @apply  text-blue-400 bg-indigo-50;
+}
+.btn-abas-on {
+  @apply block px-5 py-2 text-center text-white bg-slate-500 flex justify-center;
+}
+.btn-abas-off {
+  @apply block px-5 py-2 text-center text-white bg-blue-950 flex justify-center;
+}
+.div-abas {
+  @apply grid grid-cols-12 p-3 bg-slate-500 gap-x-2 md:gap-x-6 overflow-auto;
+}

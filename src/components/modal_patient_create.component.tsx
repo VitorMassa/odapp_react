@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { patient } from "../interfaces/patient.interface";
 import type { login } from "../interfaces/login.interface";
+import { brazilStates } from "../interfaces/enums/states.enum";
 
 interface ModalProps {
   open: boolean;
@@ -112,20 +113,18 @@ export default function ModalCreatePatient({
                     placeholder="Cpf"
                     value={data.cpf ? data.cpf : ""}
                     onChange={(e) => {
-                          setData((prev) => ({
-                            ...prev,
-                            cpf: e.target.value,
-                          }));
-                        }}
+                      setData((prev) => ({
+                        ...prev,
+                        cpf: e.target.value,
+                      }));
+                    }}
                     required
                   />
                   <div className="flex gap-4">
                     <div>
                       <label className="modal-label">Estado:</label>
-                      <input
-                        className="input-default"
-                        type="text"
-                        placeholder="Estado"
+                      <select
+                        className="select-form"
                         value={data.state ? data.state : ""}
                         onChange={(e) => {
                           setData((prev) => ({
@@ -133,8 +132,14 @@ export default function ModalCreatePatient({
                             state: e.target.value,
                           }));
                         }}
-                        required
-                      />
+                      >
+                        <option value="">Estado</option>
+                        {brazilStates.map((uf) => (
+                          <option key={uf} value={uf}>
+                            {uf}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div>
                       <label className="modal-label">Idade:</label>
@@ -142,11 +147,16 @@ export default function ModalCreatePatient({
                         className="input-default"
                         type="number"
                         placeholder="Idade"
+                        max={110}
                         value={data.age ? data.age : ""}
                         onChange={(e) => {
+                          const value = Number(e.target.value);
+
+                          if (value > 110) return; // ignora se passar de 110
+
                           setData((prev) => ({
                             ...prev,
-                            age: e.target.value,
+                            age: String(value),
                           }));
                         }}
                         required

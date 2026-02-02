@@ -4,24 +4,33 @@ import ShowPatientsAdmin from "../components/show_patients_admin.component";
 import ShowTeamsAdmin from "../components/show_teams_admin.component";
 import { useState } from "react";
 import ShowUserTeams from "../components/show_teams_medic.component";
+import ShowPatientsUser from "../components/show_patients_user.component";
 
 const Home = () => {
   const { user } = useAuth();
-  const [update, setUpdate] = useState<Date>(new Date)
+  const [update, setUpdate] = useState<Date>(new Date());
 
   function handleAttPatientTeam() {
-    setUpdate(new Date)
+    setUpdate(new Date());
   }
 
   return (
     <div className="mt-4 mb-8 mx-8">
-      <h1 className="uppercase text-center text-xl font-bold text-blue-600 border-b border-blue-700 mb-4">{`Página Principal de ${user?.role?.name}`}</h1>
+      <h1 className="uppercase text-center text-xl font-bold text-blue-600 border-b border-blue-700 mb-4">{`Página Principal do ${user?.role?.name != "stake_holder" ? user?.role?.name : "Usuário"}`}</h1>
       {user?.role ? (
         (user?.role.name == roleTypes.admin && (
           <div className="flex flex-col gap-4">
-            <ShowPatientsAdmin user={user} onNewTeam={handleAttPatientTeam} update_infos={update} />
+            <ShowPatientsAdmin
+              user={user}
+              onNewTeam={handleAttPatientTeam}
+              update_infos={update}
+            />
             <span className="border-b w-full mt-4"></span>
-            <ShowTeamsAdmin user={user} onDeleteTeam={handleAttPatientTeam} update_infos={update} />
+            <ShowTeamsAdmin
+              user={user}
+              onDeleteTeam={handleAttPatientTeam}
+              update_infos={update}
+            />
           </div>
         )) ||
         (user?.role.name == roleTypes.medic && (
@@ -30,7 +39,8 @@ const Home = () => {
           </div>
         )) ||
         (user?.role.name == roleTypes.stake_holder && (
-          <div className="">
+          <div className="flex flex-col gap-4">
+            <ShowPatientsUser user={user} />
           </div>
         ))
       ) : (

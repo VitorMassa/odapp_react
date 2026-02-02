@@ -14,6 +14,8 @@ import type { teamUser } from "../interfaces/teams_users.interface";
 import { createNote, deleteNote, updateNote } from "../services/note.service";
 import type { note } from "../interfaces/note.interface";
 import { readPatientReport } from "../services/patient.service";
+import type { report } from "../interfaces/patient_report.interface";
+import { updateReport } from "../services/patient_report.service";
 
 interface ModalProps {
   open: boolean;
@@ -38,6 +40,16 @@ export const emptyNote: note = {
   updated_at: "",
 };
 
+export const emptyReport: report = {
+  id: 0,
+  uuid_report: "",
+  uuid_patient: "",
+  updated_by_uuid_user: "",
+  content: "",
+  created_at: "",
+  updated_at: "",
+};
+
 export default function ModalTeamInfos({
   open,
   teamData,
@@ -47,9 +59,11 @@ export default function ModalTeamInfos({
   const [dataTeam, setDataTeam] = useState<team>(teamData ?? emptyTeam);
   const [teamUsers, setTeamUsers] = useState<teamUser[]>([]);
   const [teamNotes, setTeamNotes] = useState<note[]>([]);
-  const [teamPatientReport, setTeamPatientReport] = useState({});
+  const [teamPatientReport, setTeamPatientReport] =
+    useState<report>(emptyReport);
   const [addNote, setAddNote] = useState<boolean>(false);
   const [editNote, setEditNote] = useState<boolean>(false);
+  const [editReport, setEditReport] = useState<boolean>(false);
   const [newNoteContent, setNewNoteContent] = useState<string>("");
   const [selectedNote, setSelectedNote] = useState<note>(emptyNote);
 
@@ -181,6 +195,21 @@ export default function ModalTeamInfos({
       );
   }
 
+  async function handleUpdateReport(report: report) {
+    setLoading(true);
+    if (teamData)
+      await updateReport(report, user).then(
+        (response) => {
+          handleGetTeamPatientReport(teamData);
+          setLoading(false);
+          setEditReport(false);
+        },
+        (error) => {
+          setLoading(false);
+        },
+      );
+  }
+
   return (
     <>
       <div
@@ -220,13 +249,13 @@ export default function ModalTeamInfos({
                     disabled
                   />
                 </div>
-                <div className="w-full flex justify-evenly gap-4">
+                <div className="w-full flex gap-4">
                   <div className="w-[70%]">
                     <label className="modal-label">Lider da Equipe:</label>
                     <input
                       className="input-default"
                       type="text"
-                      placeholder="Nome da Equipe"
+                      placeholder="Nome do Lider"
                       value={dataTeam.leader_name ? dataTeam.leader_name : ""}
                       onChange={() => {}}
                       disabled
@@ -235,16 +264,27 @@ export default function ModalTeamInfos({
                   {user.uuid_user == teamData?.leader_uuid && (
                     <div className="mt-1 w-[30%]">
                       <label className="modal-label !text-white">.</label>
-                      <button
+                      {/* <button
                         className={`bg-blue-600 p-2 mb-1 border border-blue-600 rounded text-white font-bold flex gap-1 hover:bg-blue-700 hover:border-blue-700 transition-colors duration-150`}
                         onClick={() => {
                           !addNote
-                            ? setAddNote(true)
-                            : handleCreateNote(newNoteContent);
+                            ? setEditReport(true)
+                            : handleUpdateReport(teamPatientReport);
                         }}
                       >
                         <PencilIcon className=" size-5 mt-0.5" />
                         <span>Editar Laudo</span>
+                      </button> */}
+                      <button
+                        className={`bg-blue-600 p-2 mb-1 border border-blue-600 rounded text-white font-bold flex gap-1 hover:bg-blue-700 hover:border-blue-700 transition-colors duration-150 ${editReport ? "!bg-green-600 !border-green-600 hover:!bg-green-700 hover:!border-green-700" : ""}`}
+                        onClick={() => {
+                          !editReport
+                            ? setEditReport(true)
+                            : handleUpdateReport(teamPatientReport);
+                        }}
+                      >
+                        <PencilIcon className=" size-5 mt-0.5" />
+                        <span>{`${!editReport ? "Editar Laudo" : "Salvar Laudo"}`}</span>
                       </button>
                     </div>
                   )}
@@ -252,23 +292,21 @@ export default function ModalTeamInfos({
                 <div>
                   <label className="modal-label">Laudo do Paciente:</label>
                   <textarea
-                    className={`border ${user.uuid_user != teamData?.leader_uuid ? "bg-slate-200" : "border-blue-600"}  rounded p-2 w-full h-32`}
+                    className={`border ${!(user.uuid_user === teamData?.leader_uuid && editReport) ? "bg-slate-200" : "border-blue-600"}  rounded p-2 w-full h-32`}
                     maxLength={250}
                     placeholder="Descreva aqui..."
-                    value={teamPatientReport.content ? teamPatientReport.content : ""}
+                    value={teamPatientReport?.content ?? ""}
                     onChange={(e) => {
                       setTeamPatientReport((prev) => ({
                         ...prev,
                         content: e.target.value,
                       }));
                     }}
-                    disabled={
-                      user.uuid_user != teamData?.leader_uuid ? true : false
-                    }
+                    disabled={!(user.uuid_user === teamData?.leader_uuid && editReport)}
                   />
                   <span
-                    className={`text-blue-600 font-bold ${!newNoteContent ? "hidden" : "visible"}`}
-                  >{`${selectedNote ? selectedNote.content.length : "-"}/250 caracteres`}</span>
+                    className={`text-blue-600 font-bold ${!editReport ? "hidden" : "visible"}`}
+                  >{`${teamPatientReport?.content?.length ?? 0}/250 caracteres`}</span>
                 </div>
                 <div className="w-full mt-3">
                   <div className="w-full flex gap-4 mb-2">
@@ -415,7 +453,7 @@ export default function ModalTeamInfos({
                         />
                         <span
                           className={`text-blue-600 font-bold ${!newNoteContent ? "hidden" : "visible"}`}
-                        >{`${newNoteContent ? newNoteContent.length : "-"}/250 caracteres`}</span>
+                        >{`${newNoteContent?.length ?? 0}/250 caracteres`}</span>
                       </div>
                     )) || (
                       <div>
@@ -423,7 +461,7 @@ export default function ModalTeamInfos({
                           className="border border-blue-600 rounded p-2 w-full h-32"
                           maxLength={250}
                           placeholder="Descreva aqui..."
-                          value={selectedNote ? selectedNote.content : ""}
+                          value={selectedNote?.content ?? ""}
                           onChange={(e) => {
                             setSelectedNote((prev) => ({
                               ...prev,
@@ -433,7 +471,7 @@ export default function ModalTeamInfos({
                         />
                         <span
                           className={`text-blue-600 font-bold ${!newNoteContent ? "hidden" : "visible"}`}
-                        >{`${selectedNote ? selectedNote.content.length : "-"}/250 caracteres`}</span>
+                        >{`${selectedNote?.content?.length ?? 0}/250 caracteres`}</span>
                       </div>
                     )}
                 </div>

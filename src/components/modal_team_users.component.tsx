@@ -12,7 +12,11 @@ import {
 import ModalLoading from "./modal_loading.component";
 import { PlusIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import type { user } from "../interfaces/user.interface";
-import { createTeamUser, deleteTeamUser } from "../services/teams_users.service";
+import {
+  createTeamUser,
+  deleteTeamUser,
+  updateTeamLeader,
+} from "../services/teams_users.service";
 import type { teamUser } from "../interfaces/teams_users.interface";
 
 interface ModalProps {
@@ -38,7 +42,7 @@ export default function ModalTeamUsers({
   const [selectedUUIDNewUser, setSelectedUUIDNewUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const columns = ["Nome Participante", "Cargo", "Ações"];
+  const columns = ["Nome Participante", "Cargo", "Lider", "Ações"];
 
   useEffect(() => {
     if (teamData) {
@@ -49,8 +53,8 @@ export default function ModalTeamUsers({
   }, [teamData]);
 
   async function fetchData(team: team) {
-      handleGetTeamUsers(team);
-      handleGetNotTeamUsers(team);
+    handleGetTeamUsers(team);
+    handleGetNotTeamUsers(team);
   }
 
   async function handleGetTeamUsers(data: team) {
@@ -83,9 +87,9 @@ export default function ModalTeamUsers({
     setLoading(true);
     await createTeamUser(team, user).then(
       (response) => {
-        fetchData(team)
+        fetchData(team);
         setLoading(false);
-        setSelectedUUIDNewUser("")
+        setSelectedUUIDNewUser("");
       },
       (error) => {
         setLoading(false);
@@ -97,13 +101,28 @@ export default function ModalTeamUsers({
     setLoading(true);
     await deleteTeamUser(user).then(
       (response) => {
-        fetchData(team)
+        fetchData(team);
         setLoading(false);
       },
       (error) => {
         setLoading(false);
       },
     );
+  }
+
+  async function handleUpdateTeamLeader(user: teamUser) {
+    if (teamData && !user.is_leader) {
+      setLoading(true);
+      await updateTeamLeader(teamData, user).then(
+        (response) => {
+          fetchData(teamData);
+          setLoading(false);
+        },
+        (error) => {
+          setLoading(false);
+        },
+      );
+    }
   }
 
   return (
@@ -151,10 +170,10 @@ export default function ModalTeamUsers({
                   <div className="mt-1">
                     <label className="modal-label !text-white">.</label>
                     <button
-                      className={`bg-blue-600 p-2 border border-blue-600 rounded text-white font-bold flex gap-1 hover:bg-blue-700 hover:border-blue-700 transition-colors duration-150 ${selectedUUIDNewUser != "" ? "" : "!bg-blue-950 !border-blue-950 hover:!bg-blue-950 hover:!border-blue-950" }`}
+                      className={`bg-blue-600 p-2 border border-blue-600 rounded text-white font-bold flex gap-1 hover:bg-blue-700 hover:border-blue-700 transition-colors duration-150 ${selectedUUIDNewUser != "" ? "" : "!bg-blue-950 !border-blue-950 hover:!bg-blue-950 hover:!border-blue-950"}`}
                       onClick={() => {
                         if (teamData && selectedUUIDNewUser)
-                          handleCreateTeamUser(teamData, selectedUUIDNewUser)
+                          handleCreateTeamUser(teamData, selectedUUIDNewUser);
                       }}
                     >
                       <PlusIcon className=" size-5 mt-0.5" />
@@ -168,13 +187,16 @@ export default function ModalTeamUsers({
                       name=""
                       id="lista_restritiva"
                       value={selectedUUIDNewUser}
-                      onChange={(e) => {setSelectedUUIDNewUser(e.target.value)}}
+                      onChange={(e) => {
+                        setSelectedUUIDNewUser(e.target.value);
+                      }}
                       required
                     >
                       <option value="">
                         {selectedUUIDNewUser
-                          ? notTeamUsers.find((b) => b.uuid_user === selectedUUIDNewUser)
-                              ?.name || "SELECIONE"
+                          ? notTeamUsers.find(
+                              (b) => b.uuid_user === selectedUUIDNewUser,
+                            )?.name || "SELECIONE"
                           : "SELECIONE"}
                       </option>
                       {notTeamUsers ? (
@@ -219,12 +241,23 @@ export default function ModalTeamUsers({
                               <td className="default-table-content">
                                 {data.name_role ? data.name_role : "-"}
                               </td>
+                              <td className="default-table-content">
+                                <input
+                                  type="checkbox"
+                                  id=""
+                                  checked={data.is_leader ? true : false}
+                                  className="w-4 h-4 text-blue-600 accent-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                  onChange={() => {
+                                    handleUpdateTeamLeader(data);
+                                  }}
+                                />
+                              </td>
                               <td className="table-content-actions">
                                 <button
                                   className="table-btn-delete"
                                   onClick={() => {
-                                    if(teamData)
-                                      handleDeleteTeamUser(teamData, data)
+                                    if (teamData)
+                                      handleDeleteTeamUser(teamData, data);
                                   }}
                                 >
                                   <TrashIcon className="size-5" />

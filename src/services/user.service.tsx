@@ -25,3 +25,15 @@ export const readUserTeams = async (user: login) => {
     throw error;
   }
 };
+
+export const readUserPatients = async (user: login) => {
+  try {
+    const response = await https.get(`${route}/patients`, {
+      params: { uuid_user: user.uuid_user },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -5,7 +5,6 @@ import { https } from "../util/https.util";
 
 const route = "/patients";
 
-//Administrador
 export const readAllPatients = async () => {
   try {
     const response = await https.get(`${route}/`);
@@ -60,14 +59,38 @@ export const deletePatient = async (patient: patient) => {
   }
 };
 
+export const readPatientUsers = async (patient: patient) => {
+  try {
+    const response = await https.get(`${route}/users`, {
+      params: { uuid_patient: patient.uuid_patient },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const readNotPatientUsers = async (patient: patient) => {
+  try {
+    const response = await https.get(`${route}/not-users`, {
+      params: { uuid_patient: patient.uuid_patient },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const readPatientReport = async (team: team) => {
   try {
-    console.log("REPORT:", team)
+    console.log("REPORT:", team);
     const response = await https.get(`${route}/report`, {
       params: { uuid_patient: team.uuid_patient },
     });
 
-    console.log("RESPONSE:", response)
+    console.log("RESPONSE:", response.data);
     return response.data.patient_report;
   } catch (error) {
     throw error;

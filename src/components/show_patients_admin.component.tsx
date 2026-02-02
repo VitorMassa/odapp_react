@@ -13,6 +13,7 @@ import ModalEditPatient from "./modal_patient_edit.component";
 import ModalCreatePatient from "./modal_patient_create.component";
 import type { login } from "../interfaces/login.interface";
 import { createTeam } from "../services/team.service";
+import ModalPatientUsers from "./modal_patient_users.component";
 
 interface ShowProps {
   user: login;
@@ -23,11 +24,13 @@ interface ShowProps {
 export default function ShowPatientsAdmin({
   user,
   update_infos,
-  onNewTeam, 
+  onNewTeam,
 }: ShowProps) {
   const [patientsData, setPatientsData] = useState<patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<patient>();
 
+  const [openPatientUsersModal, setOpenPatientUsersModal] =
+    useState<boolean>(false);
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false);
   const [openEditModal, setOpenEditModal] = useState<boolean>(false);
   const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
@@ -47,7 +50,7 @@ export default function ShowPatientsAdmin({
   }, []);
 
   useEffect(() => {
-      handleGetPatients();
+    handleGetPatients();
   }, [update_infos]);
 
   function handleConfirmationModal(
@@ -229,6 +232,16 @@ export default function ShowPatientsAdmin({
                         <span className="hidden md:block">Equipe</span>
                       </button>
                       <button
+                        className={`table-btn-edit !gap-1`}
+                        onClick={() => {
+                          setSelectedPatient(data);
+                          setOpenPatientUsersModal(true);
+                        }}
+                      >
+                        <span className="md:hidden">Fam.</span>
+                        <span className="hidden md:block">Familiares</span>
+                      </button>
+                      <button
                         className="table-btn-edit"
                         onClick={() => {
                           handleEditModal(data);
@@ -263,6 +276,11 @@ export default function ShowPatientsAdmin({
         userData={user}
         onClose={() => setOpenCreateModal(false)}
         onSave={handleCreatePatient}
+      />
+      <ModalPatientUsers
+        open={openPatientUsersModal}
+        onClose={() => setOpenPatientUsersModal(false)}
+        patientData={selectedPatient}
       />
       <ModalConfirm
         open={openConfirmModal}

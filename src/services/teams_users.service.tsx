@@ -18,6 +18,18 @@ export const createTeamUser = async (team: team, user: string) => {
   }
 };
 
+export const updateTeamLeader = async (team: team, team_user: teamUser) => {
+  try {
+    const response = await https.put(`${route}/leader`, {
+      uuid_team: team.uuid_team,
+      uuid_user: team_user.uuid_user,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deleteTeamUser = async (user: teamUser) => {
   try {
     const response = await https.delete(`${route}/`, {

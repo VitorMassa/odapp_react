@@ -16,7 +16,7 @@ const ModalConfirm = (ModalProps: ModalProps) => {
     // backdrop
     <div
       className={`
-            fixed inset-0 top-16 flex justify-center items-center transition-colors
+            fixed inset-0 top-16 flex justify-center items-center transition-colors z-50
             ${ModalProps.open ? "visible bg-black/20" : "invisible"}
           `}
     >

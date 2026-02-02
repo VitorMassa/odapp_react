@@ -9,7 +9,7 @@ const ModalLoading = (ModalProps: ModalProps) => {
     <>
     <div
       className={`
-          fixed inset-0 justify-center z-50 items-center transition-colors hidden sm:flex 
+          fixed inset-0 justify-center z-50 items-center transition-colors hidden sm:flex z-50
           ${ModalProps.open ? "visible bg-black/40" : "invisible"}
         `}
     >

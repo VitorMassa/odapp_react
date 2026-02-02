@@ -19,7 +19,6 @@ interface ModalProps {
   open: boolean;
   teamData: team | undefined;
   onClose?: () => void;
-  //onSave: (patient: patient, user: login) => void;
 }
 
 export const emptyTeam: team = {
@@ -32,7 +31,6 @@ export default function ModalTeamUsers({
   open,
   teamData,
   onClose,
-  //onSave,
 }: ModalProps) {
   const [dataTeam, setDataTeam] = useState<team>(teamData ?? emptyTeam);
   const [teamUsers, setTeamUsers] = useState<teamUser[]>([]);
@@ -87,6 +85,7 @@ export default function ModalTeamUsers({
       (response) => {
         fetchData(team)
         setLoading(false);
+        setSelectedUUIDNewUser("")
       },
       (error) => {
         setLoading(false);
@@ -119,7 +118,7 @@ export default function ModalTeamUsers({
         <div
           onClick={(e) => e.stopPropagation()}
           className={`
-            bg-white rounded-xl shadow transition-all isolate min-w-[50%]
+            bg-white rounded-xl shadow transition-all isolate min-w-[50%] z-50
             ${open ? "scale-100 opacity-100" : "scale-125 opacity-0"}
           `}
         >

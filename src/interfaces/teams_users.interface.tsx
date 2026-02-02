@@ -1,5 +1,6 @@
 export interface teamUser {
     uuid_team_user: string;
+    is_leader: boolean;
     id:number,
     name: string,
     email: string,

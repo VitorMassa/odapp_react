@@ -1,5 +1,6 @@
 import type { login } from "../interfaces/login.interface";
 import type { patient } from "../interfaces/patient.interface";
+import type { team } from "../interfaces/team.interface";
 import { https } from "../util/https.util";
 
 const route = "/patients";
@@ -54,6 +55,20 @@ export const deletePatient = async (patient: patient) => {
       data: { uuid_patient: patient.uuid_patient },
     });
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const readPatientReport = async (team: team) => {
+  try {
+    console.log("REPORT:", team)
+    const response = await https.get(`${route}/report`, {
+      params: { uuid_patient: team.uuid_patient },
+    });
+
+    console.log("RESPONSE:", response)
+    return response.data.patient_report;
   } catch (error) {
     throw error;
   }

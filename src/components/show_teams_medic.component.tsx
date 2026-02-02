@@ -15,18 +15,19 @@ import type { login } from "../interfaces/login.interface";
 import { createTeam, deleteTeam, readAllTeams } from "../services/team.service";
 import type { team } from "../interfaces/team.interface";
 import ModalTeamUsers from "./modal_team_users.component";
+import { readUserTeams } from "../services/user.service";
+import ModalTeamInfos from "./modal_team_infos.component";
 
 interface ShowProps {
   user: login;
-  onDeleteTeam: () => void;
-  update_infos: Date
+  update_infos?: Date;
 }
 
-export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: ShowProps) {
+export default function ShowUserTeams({ user }: ShowProps) {
   const [teamsData, setTeamsData] = useState<team[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<team>();
 
-  const [openTeamUsersModal, setOpenTeamUsersModal] = useState<boolean>(false);
+  const [openTeamInfosModal, setOpenTeamInfosModal] = useState<boolean>(false);
   const [openConfirmModal, setOpenConfirmModal] = useState<boolean>(false);
   const [confirmTitleModal, setConfirmTitleModal] = useState<string>("");
   const [confirmDescriptionModal, setConfirmDescriptionModal] =
@@ -37,17 +38,11 @@ export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: Sho
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const columns = ["Nome Equipe", "Ações"];
+  const columns = ["Nome Equipe", "Lider", "Ações"];
 
   useEffect(() => {
     handleGetTeams();
   }, []);
-
-  useEffect(() => {
-    if (update_infos) {
-      handleGetTeams();
-    }
-  }, [update_infos]);
 
   function handleConfirmationModal(
     title: string,
@@ -66,43 +61,23 @@ export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: Sho
     });
   }
 
-  function handleTeamUsersModal(team: team) {
+  function handleTeamInfoModal(team: team) {
     setSelectedTeam(team);
-    setOpenTeamUsersModal(true);
+    setOpenTeamInfosModal(true);
   }
 
   async function handleGetTeams() {
     setLoading(true);
-    await readAllTeams().then(
+    await readUserTeams(user).then(
       (response) => {
-        setTeamsData(response);
+        console.log(response.data);
+        setTeamsData(response.data.user_teams);
         setLoading(false);
       },
       (error) => {
         setLoading(false);
       },
     );
-  }
-
-  async function handleDeleteTeam(team: team) {
-    const confirm = await handleConfirmationModal(
-      "Apagar Equipe",
-      `Deseja Apagar o Equipe ${team.name}?`,
-    );
-
-    if (!confirm) {
-      return;
-    }
-    setLoading(true);
-    try {
-      await deleteTeam(team);
-      await handleGetTeams();
-      await onDeleteTeam();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
   }
 
   return (
@@ -134,22 +109,17 @@ export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: Sho
                     <td className="default-table-content">
                       {data.name ? data.name : "-"}
                     </td>
+                    <td className="default-table-content">
+                      {data.leader_name ? data.leader_name : "-"}
+                    </td>
                     <td className="table-content-actions">
                       <button
                         className={`table-btn-edit`}
                         onClick={() => {
-                          handleTeamUsersModal(data);
+                          handleTeamInfoModal(data);
                         }}
                       >
-                        <span>Integrantes</span>
-                      </button>
-                      <button
-                        className="table-btn-delete"
-                        onClick={() => {
-                          handleDeleteTeam(data);
-                        }}
-                      >
-                        <TrashIcon className="size-5" />
+                        <span>Mais Infos</span>
                       </button>
                     </td>
                   </tr>
@@ -159,11 +129,6 @@ export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: Sho
           )}
         </table>
       </div>
-      <ModalTeamUsers
-        open={openTeamUsersModal}
-        onClose={() => setOpenTeamUsersModal(false)}
-        teamData={selectedTeam}
-      />
       <ModalConfirm
         open={openConfirmModal}
         onClose={() => setOpenConfirmModal(false)}
@@ -172,6 +137,12 @@ export default function ShowTeamsAdmin({ user, update_infos, onDeleteTeam }: Sho
         setConfirm={(value) => {
           if (tempConfirmHandler) tempConfirmHandler(value);
         }}
+      />
+      <ModalTeamInfos
+        open={openTeamInfosModal}
+        onClose={() => setOpenTeamInfosModal(false)}
+        teamData={selectedTeam}
+        user={user}
       />
       <ModalLoading open={loading} title="" />
     </div>

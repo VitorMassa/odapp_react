@@ -36,7 +36,7 @@ export default function ModalEditPatient({
     <>
       <div
         className={`
-          fixed inset-0 top-16 flex justify-center items-center transition-colors
+          fixed inset-0 top-16 flex justify-center items-center transition-colors z-50
           ${open ? "visible bg-black/20" : "invisible"}
         `}
       >

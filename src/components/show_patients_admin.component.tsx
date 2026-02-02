@@ -47,9 +47,7 @@ export default function ShowPatientsAdmin({
   }, []);
 
   useEffect(() => {
-    if (update_infos) {
       handleGetPatients();
-    }
   }, [update_infos]);
 
   function handleConfirmationModal(
@@ -160,6 +158,7 @@ export default function ShowPatientsAdmin({
     try {
       await createTeam(patient);
       await handleGetPatients();
+      await onNewTeam();
     } catch (error) {
       console.log(error);
     } finally {

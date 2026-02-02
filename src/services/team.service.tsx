@@ -1,3 +1,4 @@
+import type { login } from "../interfaces/login.interface";
 import type { patient } from "../interfaces/patient.interface";
 import type { team } from "../interfaces/team.interface";
 import { https } from "../util/https.util";
@@ -15,7 +16,6 @@ export const readAllTeams = async () => {
 };
 
 export const readTeamUsers = async (team: team) => {
-  console.log(team);
   try {
     const response = await https.get(`${route}/users`, {
       params: { uuid_team: team.uuid_team },
@@ -28,9 +28,20 @@ export const readTeamUsers = async (team: team) => {
 };
 
 export const readNotTeamUsers = async (team: team) => {
-  console.log(team);
   try {
     const response = await https.get(`${route}/not-users`, {
+      params: { uuid_team: team.uuid_team },
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const readTeamNotes = async (team: team) => {
+  try {
+    const response = await https.get(`${route}/notes`, {
       params: { uuid_team: team.uuid_team },
     });
 

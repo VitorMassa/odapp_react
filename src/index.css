@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 .btn-on-login {
-  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 hover:bg-green-600 bg-green-500 transition-colors;
+  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 hover:bg-blue-600 bg-blue-500 transition-colors;
 }
 .btn-off-login {
-  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 bg-green-500 opacity-40 cursor-not-allowed;
+  @apply block w-full px-4 py-3 ml-auto text-center text-white border rounded mt-7 bg-blue-500 opacity-40 cursor-not-allowed;
 }
 .label-login {
-  @apply block mb-2 font-bold uppercase sm:text-sm text-gray-800;
+  @apply block mb-2 font-bold uppercase sm:text-sm text-blue-600;
 }
 .default-label {
   @apply block mb-2 font-bold uppercase text-sm text-white;

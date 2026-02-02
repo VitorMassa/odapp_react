@@ -1,73 +1,17 @@
-# React + TypeScript + Vite
+### Fluxo do usuário (React) 
+**Instalação de Pacotes**: com o Node, vem o gerenciador de pacotes NPM, que irá lhe possibilitar baixar automaticamente os pacotes necessários para rodar o programa. Segue a linha de comando:
+- **Instalar**: npm install
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Executar a versão DEV**: no "package.json", já foi deixado um script para a execução da aplicação. Segue a linha de comando:
+- **Executar**: npm run dev
 
-Currently, two official plugins are available:
+**USUARIOS SEED**:
+- admin@domain.com senha: admin123 -> Cargo: Admin
+- medic@domain.com senha: medic123 -> Cargo: Medic
+- medic2@domain.com senha: medic2123 -> Cargo: Medic
+- stake_holder@domain.com senha: stake_holder123 -> Cargo: Stake Holder
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Cargos**:
+- **Admin**: Cadastrar, editar ou deletar pacientes; Atribuir ou desatribuir "familiares" (outros usuários) ao paciente; Criar, editar ou deletar o time responsável pelo paciente; Atribuir ou desatribuir médicos ao time; Atribuir ou desatribuir o médico lider ao time;
+- **Medic**: Ver times que ele pertence; Cadastrar, editar ou deletar SUAS notas no time, pode ver as notas de outros médicos; Caso o médico for o líder do time, poderá editar o Laudo (Informação que o paciente e familiares terão acesso, não terão acesso a notas);
+- **Stake Holder**: Irá ver apenas as informações e o LAUDO do paciente que está vinculado a ele.
